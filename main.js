@@ -30,15 +30,29 @@ var config = {
 var BingoSpace,
   BingoSpaceView;
 
-BingoSpace = Backbone.Model.extend({});
+BingoSpace = Backbone.Model.extend({
+  defaults: {
+    checked: false
+  }
+});
 
 BingoSpaceView = Backbone.View.extend({
   tagName: 'li',
   className: 'bingo-space',
+  events: {
+    'click': 'toggleChecked'
+  },
   initialize: function() {
-    _.bindAll( this, 'render', 'template' );
+    _.bindAll( this, 'render', 'template', 'toggleChecked' );
 
-    this.on( 'change', this.render );
+    this.model.on( 'change', this.render );
+    this.model.on( 'change:checked', function( bingoSpace ) {
+      if ( bingoSpace.get( 'checked' ) ) {
+        this.$el.addClass( 'bingo-space-checked' );
+      } else {
+        this.$el.removeClass( 'bingo-space-checked' );
+      }
+    }, this );
   },
   template: _.template( $( '#bingo-space-template' ).html() ),
   render: function() {
@@ -47,6 +61,9 @@ BingoSpaceView = Backbone.View.extend({
       config: config
     }) );
     return this;
+  },
+  toggleChecked: function() {
+    this.model.set( 'checked', !this.model.get( 'checked' ) );
   }
 });
 
@@ -93,6 +110,11 @@ BingoCardView = Backbone.View.extend({
   }
 });
 
+// -=-=-=-=-=-=-=-=-=-=-=-=-= DEBUGGING VARIABLES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+window.BingoSpace = BingoSpace;
+window.BingoSpaceView = BingoSpaceView;
+window.BingoCard = BingoCard;
+window.BingoCardView = BingoCardView;
 
 }( this ));
