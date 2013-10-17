@@ -105,14 +105,14 @@ BingoSpace = Backbone.Model.extend({
   toggleChecked: function() {
     // Don't let the user uncheck the free space.
     if ( this.get( 'id' ) === 'free space' ) {
-      this.save({
+      this.set({
         checked: true
       });
       return;
     }
 
     // For non-free spaces, toggle the space's checked state.
-    this.save({
+    this.set({
       checked: !this.get( 'checked' )
     });
   }
@@ -157,7 +157,6 @@ var BingoCard,
 
 BingoCard = Backbone.Collection.extend({
   model: BingoSpace,
-  localStorage: new Backbone.LocalStorage( 'BingoCard' ),
   initialize: function() {
     _.bindAll( this, 'comparator', 'nextOrder' );
   },
@@ -221,10 +220,7 @@ AppCore = Backbone.View.extend({
   initialize: function() {
     _.bindAll( this, 'resetCard' );
 
-    card.fetch();
-    if ( !card.length ) {
-      this.resetCard();
-    }
+    this.resetCard();
   },
   resetCard: function() {
     var cardIds,
@@ -241,19 +237,16 @@ AppCore = Backbone.View.extend({
       id: 'free space',
       checked: true
     });
-    cardObjs.push.apply( _.map( cardIds.slice( 12, 24 ), function( cardId ) {
-      return {
-        id: cardId
-      };
-    }) );
+    cardObjs.push.apply(
+      cardObjs,
+      _.map( cardIds.slice( 12, 24 ), function( cardId ) {
+        return {
+          id: cardId
+        };
+      }) );
 
-    card.each(function( bingoSpace ) {
-      bingoSpace.destroy();
-    });
+    card.reset([]);
     card.set( cardObjs );
-    card.each(function( bingoSpace ) {
-      bingoSpace.save();
-    });
   }
 });
 
