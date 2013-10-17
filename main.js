@@ -61,7 +61,24 @@ var config = {
     '9'
   ],
   cardsTall: 5,
-  cardsWide: 5
+  cardsWide: 5,
+  winningCombos: [
+    // Rows
+    [ 0, 1, 2, 3, 4 ],
+    [ 5, 6, 7, 8, 9 ],
+    [ 10, 11, 12, 13, 14 ],
+    [ 15, 16, 17, 18, 19 ],
+    [ 20, 21, 22, 23, 24 ],
+    // Columns
+    [ 0, 5, 10, 15, 20 ],
+    [ 1, 6, 11, 16, 21 ],
+    [ 2, 7, 12, 17, 22 ],
+    [ 3, 8, 13, 18, 23 ],
+    [ 4, 9, 14, 19, 24 ],
+    // Diagonals
+    [ 0, 6, 12, 18, 24 ],
+    [ 4, 8, 12, 16, 20 ]
+  ]
 };
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=- UTILITY FUNCTIONS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -158,7 +175,24 @@ var BingoCard,
 BingoCard = Backbone.Collection.extend({
   model: BingoSpace,
   initialize: function() {
-    _.bindAll( this, 'comparator', 'nextOrder' );
+    _.bindAll( this, 'comparator', 'nextOrder', 'validate' );
+  },
+  validate: function() {
+    // For each combo option listed in config.winningCombos:
+    //   * Go through each index listed, and determine whether the bingo space
+    //     at that index is checked.
+    //   * Return whether _all_ of the spaces were checked.
+    // If any of those combo options end up true (i.e., all of the spaces it
+    // identifies were checked), return true.
+    return typeof _.find( config.winningCombos, function( combo ) {
+      var comboChecks = _.map( combo, function( spaceIndex ) {
+        return this.at( spaceIndex ).get( 'checked' );
+      }, this );
+
+      return typeof _.find( comboChecks, function( check ) {
+        return !check;
+      }, this ) === 'undefined';
+    }, this ) !== 'undefined';
   },
   // Sort sequentially instead of by (pseudorandom) GUID in LocalStorage. Good
   // idea and execution by Jerome Gravel-Niquet:
@@ -274,5 +308,6 @@ window.BingoCard = BingoCard;
 window.BingoCardView = BingoCardView;
 window.card = card;
 window.cardView = cardView;
+window.config = config;
 
 }( this ));
