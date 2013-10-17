@@ -14,15 +14,15 @@ function log() {
 // Library variables
 var $ = window.jQuery,
   _ = window._,
-  Backbone = window.Backbone,
-  Firebase = window.Firebase;
+  Backbone = window.Backbone;
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=- CONFIGURATION =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+_.templateSettings.variable = 'context';
+
 var config = {
   cardsTall: 5,
-  cardsWide: 5,
-  firebaseUrl: 'https://ona13-bingo.firebaseio.com'
+  cardsWide: 5
 };
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-= BINGO SPACES =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -43,6 +43,7 @@ BingoSpaceView = Backbone.View.extend({
   template: _.template( $( '#bingo-space-template' ).html() ),
   render: function() {
     this.$el.html( this.template({
+      bingoSpace: this.model,
       config: config
     }) );
     return this;
@@ -54,9 +55,9 @@ BingoSpaceView = Backbone.View.extend({
 var BingoCard,
   BingoCardView;
 
-BingoCard = Backbone.Firebase.Collection.extend({
+BingoCard = Backbone.Collection.extend({
   model: BingoSpace,
-  firebase: config.firebaseUrl
+  localStorage: new Backbone.LocalStorage( 'BingoCard' )
 });
 
 BingoCardView = Backbone.View.extend({
@@ -91,5 +92,7 @@ BingoCardView = Backbone.View.extend({
     return this;
   }
 });
+
+
 
 }( this ));
