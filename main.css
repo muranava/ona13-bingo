@@ -24,5 +24,6 @@
 }
 
 .bingo-space-checked {
-  background-color: #c00;
+  background-color: #ccc;
+  font-weight: bold;
 }
