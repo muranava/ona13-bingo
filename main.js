@@ -21,9 +21,71 @@ var $ = window.jQuery,
 _.templateSettings.variable = 'context';
 
 var config = {
+  appCoreSelector: '#bingo-app',
+  cardOptions: [
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9'
+  ],
   cardsTall: 5,
   cardsWide: 5
 };
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=- UTILITY FUNCTIONS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// Fisher-Yates array shuffle, from Mike Bostock:
+// http://bost.ocks.org/mike/shuffle/
+function shuffle( array ) {
+  var m = array.length,
+    t,
+    i;
+
+  // While there remain elements to shuffle…
+  while ( m ) {
+    // Pick a remaining element…
+    i = Math.floor( Math.random() * m-- );
+
+    // And swap it with the current element.
+    t = array[ m ];
+    array[ m ] = array[ i ];
+    array[ i ] = t;
+  }
+
+  return array;
+}
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-= BINGO SPACES =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -31,8 +93,19 @@ var BingoSpace,
   BingoSpaceView;
 
 BingoSpace = Backbone.Model.extend({
-  defaults: {
-    checked: false
+  defaults: function () {
+    return {
+      checked: false,
+      order: card.nextOrder()
+    };
+  },
+  initialize: function() {
+    _.bindAll( this, 'toggleChecked' );
+  },
+  toggleChecked: function() {
+    this.save({
+      checked: !this.get( 'checked' )
+    });
   }
 });
 
@@ -63,7 +136,7 @@ BingoSpaceView = Backbone.View.extend({
     return this;
   },
   toggleChecked: function() {
-    this.model.set( 'checked', !this.model.get( 'checked' ) );
+    this.model.toggleChecked();
   }
 });
 
@@ -74,16 +147,32 @@ var BingoCard,
 
 BingoCard = Backbone.Collection.extend({
   model: BingoSpace,
-  localStorage: new Backbone.LocalStorage( 'BingoCard' )
+  localStorage: new Backbone.LocalStorage( 'BingoCard' ),
+  initialize: function() {
+    _.bindAll( this, 'comparator', 'nextOrder' );
+  },
+  // Sort sequentially instead of by (pseudorandom) GUID in LocalStorage. Good
+  // idea and execution by Jerome Gravel-Niquet:
+  // https://github.com/jeromegn/Backbone.localStorage/blob/master/examples/todos/todos.js
+  nextOrder: function() {
+    if ( !this.length ) return 1;
+    return this.last().get( 'order' ) + 1;
+  },
+  comparator: function( bingoSpace ) {
+    return bingoSpace.get( 'order' );
+  }
 });
 
 BingoCardView = Backbone.View.extend({
   tagName: 'ol',
   className: 'bingo-card',
   initialize: function() {
-    _.bindAll( this, 'render' );
+    _.bindAll( this, 'destroyAll', 'render' );
 
     this.bingoSpaceViews = {};
+
+    this.collection.on( 'reset', this.destroyAll );
+    this.collection.on( 'reset', this.render );
   },
   render: function() {
     this.collection.each(function( bingoSpace ) {
@@ -107,11 +196,61 @@ BingoCardView = Backbone.View.extend({
     }, this );
 
     return this;
+  },
+  destroyAll: function() {
+    _.each( this.bingoSpaceViews, function( bingoSpaceView ) {
+      bingoSpaceView.remove();
+    }, this );
   }
 });
 
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-= APPLICATION -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+var AppCore;
+
+AppCore = Backbone.View.extend({
+  el: $( config.appCoreSelector ).get(),
+  initialize: function() {
+    _.bindAll( this, 'resetCard' );
+
+    card.fetch();
+    if ( !card.length ) {
+      this.resetCard();
+    }
+  },
+  resetCard: function() {
+    var cardIds,
+      cardObjs;
+
+    cardIds = _.clone( config.cardOptions );
+    shuffle( cardIds );
+    cardObjs = _.map( cardIds.slice( 0, 25 ), function( cardId ) {
+      return {
+        id: cardId
+      }
+    });
+
+    card.reset( cardObjs ).sync();
+  }
+});
+
+// -=-=-=-=-=-=-=-=-=-=-= APPLICATION INITIALIZATION =-=-=-=-=-=-=-=-=-=-=-=-=-
+
+var app,
+  card,
+  cardView;
+
+card = new BingoCard();
+app = new AppCore();
+
+cardView = new BingoCardView({
+  collection: card
+});
+cardView.render().$el.appendTo( app.$el );
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-= DEBUGGING VARIABLES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+window.AppCore = AppCore;
 window.BingoSpace = BingoSpace;
 window.BingoSpaceView = BingoSpaceView;
 window.BingoCard = BingoCard;
