@@ -119,13 +119,6 @@ BingoSpaceView = Backbone.View.extend({
     _.bindAll( this, 'render', 'template', 'toggleChecked' );
 
     this.model.on( 'change', this.render );
-    this.model.on( 'change:checked', function( bingoSpace ) {
-      if ( bingoSpace.get( 'checked' ) ) {
-        this.$el.addClass( 'bingo-space-checked' );
-      } else {
-        this.$el.removeClass( 'bingo-space-checked' );
-      }
-    }, this );
   },
   template: _.template( $( '#bingo-space-template' ).html() ),
   render: function() {
@@ -133,6 +126,13 @@ BingoSpaceView = Backbone.View.extend({
       bingoSpace: this.model,
       config: config
     }) );
+
+    if ( this.model.get( 'checked' ) ) {
+      this.$el.addClass( 'bingo-space-checked' );
+    } else {
+      this.$el.removeClass( 'bingo-space-checked' );
+    }
+
     return this;
   },
   toggleChecked: function() {
@@ -230,7 +230,13 @@ AppCore = Backbone.View.extend({
       }
     });
 
-    card.reset( cardObjs ).sync();
+    card.each(function( bingoSpace ) {
+      bingoSpace.destroy();
+    });
+    card.set( cardObjs );
+    card.each(function( bingoSpace ) {
+      bingoSpace.save();
+    });
   }
 });
 
@@ -250,10 +256,13 @@ cardView.render().$el.appendTo( app.$el );
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-= DEBUGGING VARIABLES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+window.app = app;
 window.AppCore = AppCore;
 window.BingoSpace = BingoSpace;
 window.BingoSpaceView = BingoSpaceView;
 window.BingoCard = BingoCard;
 window.BingoCardView = BingoCardView;
+window.card = card;
+window.cardView = cardView;
 
 }( this ));
