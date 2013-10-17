@@ -118,7 +118,8 @@ BingoSpaceView = Backbone.View.extend({
   initialize: function() {
     _.bindAll( this, 'render', 'template', 'toggleChecked' );
 
-    this.model.on( 'change', this.render );
+    this.listenTo( this.model, 'change', this.render );
+    this.listenTo( this.model, 'destroy', this.remove );
   },
   template: _.template( $( '#bingo-space-template' ).html() ),
   render: function() {
