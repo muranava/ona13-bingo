@@ -172,8 +172,8 @@ BingoCardView = Backbone.View.extend({
 
     this.bingoSpaceViews = {};
 
-    this.collection.on( 'reset', this.destroyAll );
-    this.collection.on( 'reset', this.render );
+    this.listenTo( this.collection, 'reset', this.destroyAll );
+    this.listenTo( this.collection, 'reset', this.render );
   },
   render: function() {
     this.collection.each(function( bingoSpace ) {
