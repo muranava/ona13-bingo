@@ -206,6 +206,9 @@ var AppCore;
 
 AppCore = Backbone.View.extend({
   el: $( config.appCoreSelector ).get(),
+  events: {
+    'click #bingo-reset': 'resetCard'
+  },
   initialize: function() {
     _.bindAll( this, 'resetCard' );
 
@@ -248,7 +251,7 @@ app = new AppCore();
 cardView = new BingoCardView({
   collection: card
 });
-cardView.render().$el.appendTo( app.$el );
+cardView.render().$el.prependTo( app.$el );
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-= DEBUGGING VARIABLES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
