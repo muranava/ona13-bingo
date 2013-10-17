@@ -103,6 +103,15 @@ BingoSpace = Backbone.Model.extend({
     _.bindAll( this, 'toggleChecked' );
   },
   toggleChecked: function() {
+    // Don't let the user uncheck the free space.
+    if ( this.get( 'id' ) === 'free space' ) {
+      this.save({
+        checked: true
+      });
+      return;
+    }
+
+    // For non-free spaces, toggle the space's checked state.
     this.save({
       checked: !this.get( 'checked' )
     });
@@ -223,11 +232,20 @@ AppCore = Backbone.View.extend({
 
     cardIds = _.clone( config.cardOptions );
     shuffle( cardIds );
-    cardObjs = _.map( cardIds.slice( 0, 25 ), function( cardId ) {
+    cardObjs = _.map( cardIds.slice( 0, 12 ), function( cardId ) {
       return {
         id: cardId
-      }
+      };
     });
+    cardObjs.push({
+      id: 'free space',
+      checked: true
+    });
+    cardObjs.push.apply( _.map( cardIds.slice( 12, 24 ), function( cardId ) {
+      return {
+        id: cardId
+      };
+    }) );
 
     card.each(function( bingoSpace ) {
       bingoSpace.destroy();
