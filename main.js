@@ -312,16 +312,17 @@ cardView = new BingoCardView({
 });
 cardView.render().$el.prependTo( app.$el );
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-= DEBUGGING VARIABLES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=- HOMEMADE TWEET BUTTON =-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-window.app = app;
-window.AppCore = AppCore;
-window.BingoSpace = BingoSpace;
-window.BingoSpaceView = BingoSpaceView;
-window.BingoCard = BingoCard;
-window.BingoCardView = BingoCardView;
-window.card = card;
-window.cardView = cardView;
-window.config = config;
+$( '.bingo-win-tweet' ).on( 'click', function( event ) {
+  event.preventDefault();
+
+  window.open(
+    ('http://twitter.com/share?text=' +
+      encodeURIComponent( 'Bingo! #ONA13 #ONAbingo' ) +
+      '&url=' + encodeURIComponent( window.location.href )),
+    'sharer', 'toolbar=0,status=0,width=626,height=436'
+  );
+});
 
 }( this ));
