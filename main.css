@@ -118,7 +118,7 @@ button {
   display: none;
   left: 32.5%;
   margin: 0;
-  padding-top: 12.5%;
+  padding-top: 10%;
   position: absolute;
   right: 30%;
   text-align: center;
@@ -207,7 +207,7 @@ button {
 
   .bingo-win {
     left: 25%;
-    padding-top: 20%;
+    padding-top: 15%;
     right: 25%;
   }
 

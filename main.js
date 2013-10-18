@@ -11,6 +11,13 @@ function log() {
   }
 }
 
+// ES5 shims
+if ( !String.prototype.trim ) {
+  String.prototype.trim = function () {
+    return this.replace( /^\s+|\s+$/g, '' );
+  };
+}
+
 // Library variables
 var $ = window.jQuery,
   _ = window._,
@@ -344,9 +351,15 @@ cardView.render().$el.prependTo( app.$el );
 $( '.bingo-win-tweet' ).on( 'click', function( event ) {
   event.preventDefault();
 
+  var session = $( '.bingo-win-session' ).val().trim();
+
+  if ( session.length ) {
+    session += ' ';
+  }
+
   window.open(
     ('http://twitter.com/share?text=' +
-      encodeURIComponent( 'Bingo! #ONA13 #ONAbingo' ) +
+      encodeURIComponent( 'Bingo! ' + session + '#ONA13 #ONAbingo' ) +
       '&url=' + encodeURIComponent( window.location.href )),
     'sharer', 'toolbar=0,status=0,width=626,height=436'
   );
