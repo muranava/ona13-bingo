@@ -210,11 +210,12 @@ BingoCardView = Backbone.View.extend({
   tagName: 'ol',
   className: 'bingo-card',
   initialize: function() {
-    _.bindAll( this, 'destroyAll', 'render' );
+    _.bindAll( this, 'destroyAll', 'markWin', 'render' );
 
     this.bingoSpaceViews = {};
 
     this.listenTo( this.collection, 'reset', this.render );
+    this.listenTo( this.collection, 'change', this.markWin );
   },
   render: function() {
     this.destroyAll();
@@ -233,12 +234,21 @@ BingoCardView = Backbone.View.extend({
       this.bingoSpaceViews[ bingoSpaceId ] = bingoSpaceView;
     }, this );
 
+    this.$win = $( '#bingo-win' );
+
     return this;
   },
   destroyAll: function() {
     _.each( this.bingoSpaceViews, function( bingoSpaceView ) {
       bingoSpaceView.remove();
     }, this );
+  },
+  markWin: function() {
+    if ( this.collection.validate() ) {
+      this.$win.addClass( 'bingo-win-won' );
+    } else {
+      this.$win.removeClass( 'bingo-win-won' );
+    }
   }
 });
 
