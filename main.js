@@ -262,11 +262,11 @@ AppCore = Backbone.View.extend({
     'click #bingo-reset': 'resetCard'
   },
   initialize: function() {
-    _.bindAll( this, 'resetCard' );
+    _.bindAll( this, 'initCard', 'resetCard' );
 
-    this.resetCard();
+    this.initCard();
   },
-  resetCard: function() {
+  initCard: function() {
     var cardIds,
       cardObjs;
 
@@ -291,6 +291,10 @@ AppCore = Backbone.View.extend({
 
     card.reset([]);
     card.set( cardObjs );
+  },
+  resetCard: function() {
+    this.initCard();
+    cardView.render();
   }
 });
 
