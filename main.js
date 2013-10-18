@@ -252,7 +252,7 @@ BingoCardView = Backbone.View.extend({
       this.bingoSpaceViews[ bingoSpaceId ] = bingoSpaceView;
     }, this );
 
-    this.$win = $( '#bingo-win' );
+    this.$win = $( '#bingo-win' ).removeClass( 'bingo-win-won' );
 
     return this;
   },
