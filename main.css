@@ -35,7 +35,9 @@
     bottom: 0;
     left: 0;
     margin: 0;
-    padding-top: 40%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 10%;
     position: absolute;
     right: 0;
     top: 0;
@@ -65,4 +67,49 @@
 }
 .bingo-win-won {
   display: block;
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=- RESPONSIVE TWEAKS -=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+@media screen and (max-width: 600px) {
+  .bingo-card {
+    margin-left: 5%;
+    width: 100%;
+  }
+
+  .bingo-space-word {
+    font-size: 0.75em;
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+        -ms-hyphens: auto;
+            hyphens: auto;
+  }
+}
+
+@media screen and (min-width: 600px) and (max-width: 750px) {
+  .bingo-card {
+    margin-left: 10%;
+    width: 90%;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 900px) {
+  .bingo-card {
+    margin-left: 20%;
+    width: 70%;
+  }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1000px) {
+  .bingo-card {
+    margin-left: 25%;
+    width: 60%;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .bingo-card {
+    margin-left: 32.5%;
+    width: 40%;
+  }
 }
