@@ -1,3 +1,3 @@
 # #ONA13 buzzword bingo
 
-Coming soon!
+[Check it out!](http://myersjustinc.github.io/ona13-bingo)
