@@ -21,8 +21,7 @@ if ( !String.prototype.trim ) {
 // Library variables
 var $ = window.jQuery,
   _ = window._,
-  Backbone = window.Backbone,
-  ga = window.ga;
+  Backbone = window.Backbone;
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=- CONFIGURATION =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -175,14 +174,14 @@ BingoSpaceView = Backbone.View.extend({
 
     // Send an analytics event.
     if ( this.model.get( 'checked' ) ) {
-      ga && ga('send', {
+      window.ga && window.ga('send', {
         'hitType': 'event',
         'eventCategory': 'spaceChange',
         'eventAction': 'check',
         'eventLabel': this.model.get( 'name' )
       });
     } else {
-      ga && ga('send', {
+      window.ga && window.ga('send', {
         'hitType': 'event',
         'eventCategory': 'spaceChange',
         'eventAction': 'uncheck',
@@ -272,7 +271,7 @@ BingoCardView = Backbone.View.extend({
     if ( this.collection.validate() ) {
       this.$win.addClass( 'bingo-win-won' );
 
-      ga && ga('send', {
+      window.ga && window.ga('send', {
         'hitType': 'event',
         'eventCategory': 'gameEnd',
         'eventAction': 'win'
