@@ -14,7 +14,8 @@ function log() {
 // Library variables
 var $ = window.jQuery,
   _ = window._,
-  Backbone = window.Backbone;
+  Backbone = window.Backbone,
+  ga = window.ga;
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=- CONFIGURATION =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -121,7 +122,7 @@ BingoSpace = Backbone.Model.extend({
   },
   toggleChecked: function() {
     // Don't let the user uncheck the free space.
-    if ( this.get( 'id' ) === 'free space' ) {
+    if ( this.get( 'name' ) === 'free space' ) {
       this.set({
         checked: true
       });
@@ -164,6 +165,23 @@ BingoSpaceView = Backbone.View.extend({
   },
   toggleChecked: function() {
     this.model.toggleChecked();
+
+    // Send an analytics event.
+    if ( this.model.get( 'checked' ) ) {
+      ga && ga('send', {
+        'hitType': 'event',
+        'eventCategory': 'spaceChange',
+        'eventAction': 'check',
+        'eventLabel': this.model.get( 'name' )
+      });
+    } else {
+      ga && ga('send', {
+        'hitType': 'event',
+        'eventCategory': 'spaceChange',
+        'eventAction': 'uncheck',
+        'eventLabel': this.model.get( 'name' )
+      });
+    }
   }
 });
 
@@ -246,6 +264,12 @@ BingoCardView = Backbone.View.extend({
   markWin: function() {
     if ( this.collection.validate() ) {
       this.$win.addClass( 'bingo-win-won' );
+
+      ga && ga('send', {
+        'hitType': 'event',
+        'eventCategory': 'gameEnd',
+        'eventAction': 'win'
+      });
     } else {
       this.$win.removeClass( 'bingo-win-won' );
     }
@@ -274,18 +298,21 @@ AppCore = Backbone.View.extend({
     shuffle( cardIds );
     cardObjs = _.map( cardIds.slice( 0, 12 ), function( cardId ) {
       return {
-        id: cardId
+        id: cardId.replace( '\u00ad', '' ),
+        name: cardId
       };
     });
     cardObjs.push({
       id: 'free space',
+      name: 'free space',
       checked: true
     });
     cardObjs.push.apply(
       cardObjs,
       _.map( cardIds.slice( 12, 24 ), function( cardId ) {
         return {
-          id: cardId
+          id: cardId.replace( '\u00ad', '' ),
+          name: cardId
         };
       }) );
 
