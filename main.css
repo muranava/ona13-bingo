@@ -1,3 +1,50 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PAGE THEME =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+body {
+  background-color: #e6e6e6;
+  font-family: 'Source Sans Pro', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  background-color: #fff9eb;
+  color: #7d7596;
+  font-weight: normal;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  padding: 0.75em;
+  text-transform: uppercase;
+}
+
+button {
+  background-color: #392c72;
+  border: 1px solid #392c72;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  box-shadow: none;
+  color: #fff;
+  font-family: 'Source Sans Pro', sans-serif;
+  text-transform: uppercase;
+}
+
+.footer {
+  background-color: #330066;
+  color: #fffaec;
+  margin-top: 2em;
+  padding: 2.5%;
+}
+  .footer a {
+    color: #9999cc;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-= BINGO ITSELF -=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
 .bingo-app {
   position: relative;
 }
@@ -11,7 +58,13 @@
 }
 
 .bingo-card {
+  background-color: #fff;
+  box-shadow: 2px 2px 6px rgba(100, 100, 100, 0.3);
   margin-left: 25%;
+  padding-bottom: 3%;
+  padding-left: 3%;
+  padding-right: 0;
+  padding-top: 3%;
   width: 55%;
 }
 
@@ -44,24 +97,32 @@
   }
 
 .bingo-space-checked {
-  background-color: #666;
-  color: #ccc;
+  background-color: #9999cc;
+  color: #fff;
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-= EXTRA STUFF =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+.bingo-reset {
+  font-size: 1.5em;
+  margin-left: 50%;
 }
 
 .bingo-win {
-  background-color: #ccc;
+  background-color: #fff9eb;
   -webkit-border-radius: 20px;
      -moz-border-radius: 20px;
           border-radius: 20px;
-  bottom: 15%;
+  bottom: 20%;
+  box-shadow: 2px 2px 6px rgba(100, 100, 100, 0.3);
   display: none;
-  left: 30%;
+  left: 32.5%;
   margin: 0;
-  padding-top: 15%;
+  padding-top: 12.5%;
   position: absolute;
   right: 30%;
   text-align: center;
-  top: 15%;
+  top: 10%;
   z-index: 9001;
 }
 .bingo-win-won {
@@ -72,12 +133,15 @@
 
 @media screen and (max-width: 600px) {
   .bingo-card {
-    margin-left: 5%;
-    width: 100%;
+    margin-left: 2.5%;
+    padding-bottom: 8%;
+    padding-left: 8%;
+    padding-top: 8%;
+    width: 87.5%;
   }
 
   .bingo-space-word {
-    font-size: 0.75em;
+    font-size: 0.5em;
     -webkit-hyphens: auto;
        -moz-hyphens: auto;
         -ms-hyphens: auto;
@@ -86,44 +150,83 @@
 
   .bingo-win {
     left: 10%;
+    padding-top: 25%;
     right: 10%;
+  }
+
+  .bingo-reset {
+    margin-left: 35%;
   }
 }
 
 @media screen and (min-width: 600px) and (max-width: 750px) {
   .bingo-card {
-    margin-left: 10%;
+    margin-left: 1%;
+    padding-bottom: 8%;
+    padding-left: 8%;
+    padding-top: 8%;
     width: 90%;
   }
 
   .bingo-win {
     left: 15%;
+    padding-top: 25%;
     right: 15%;
+  }
+
+  .bingo-reset {
+    margin-left: 42.5%;
   }
 }
 
 @media screen and (min-width: 750px) and (max-width: 900px) {
   .bingo-card {
-    margin-left: 20%;
+    margin-left: 12.5%;
+    padding-bottom: 7%;
+    padding-left: 7%;
+    padding-top: 7%;
     width: 70%;
   }
 
   .bingo-win {
     left: 25%;
+    padding-top: 25%;
     right: 25%;
+  }
+
+  .bingo-reset {
+    margin-left: 45%;
   }
 }
 
 @media screen and (min-width: 900px) and (max-width: 1000px) {
   .bingo-card {
-    margin-left: 25%;
+    margin-left: 20%;
     width: 60%;
+  }
+
+  .bingo-win {
+    left: 25%;
+    padding-top: 20%;
+    right: 25%;
+  }
+
+  .bingo-reset {
+    margin-left: 45%;
   }
 }
 
 @media screen and (min-width: 1000px) {
   .bingo-card {
-    margin-left: 32.5%;
+    margin-left: 30%;
     width: 40%;
+  }
+
+  .bingo-space {
+    font-size: 0.9em;
+  }
+
+  .bingo-reset {
+    margin-left: 47.5%;
   }
 }
