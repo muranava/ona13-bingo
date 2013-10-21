@@ -30,6 +30,8 @@ _.templateSettings.variable = 'context';
 var config = {
   appCoreSelector: '#bingo-app',
   cardOptions: [
+    // These include soft hyphens ('\u00ad') for use with the CSS `hyphens`
+    // property: https://developer.mozilla.org/en-US/docs/Web/CSS/hyphens
     'Viral',
     'Crowd\u00adsource',
     'Buzz\u00adword',
